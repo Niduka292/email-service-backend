@@ -8,6 +8,7 @@ public class EmailServiceBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(EmailServiceBackendApplication.class, args);
+        System.out.println("Application running on port: 8080");
     }
 
 }
