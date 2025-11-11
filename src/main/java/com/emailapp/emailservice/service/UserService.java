@@ -7,12 +7,16 @@ import com.emailapp.emailservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Add this
 
     @Transactional
     public UserResponse registerUser(SignupRequest request) {
@@ -32,7 +36,10 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword()); // TODO: Hash password later
+
+        // Hash password before saving
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
         user.setGender(request.getGender());
 
         User savedUser = userRepository.save(user);
