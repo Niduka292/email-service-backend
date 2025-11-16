@@ -69,12 +69,33 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // React frontend URL
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // Allow your Vite React frontend (port 5173) and other possible ports
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5173",      // Vite default port
+                "http://127.0.0.1:5173",      // Alternative localhost
+                "http://localhost:3000",      // Create React App default port (backup)
+                "http://127.0.0.1:3000"
+        ));
+
+        // Allow all HTTP methods
+        configuration.setAllowedMethods(Arrays.asList(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
+        ));
+
+        // Allow all headers
         configuration.setAllowedHeaders(Arrays.asList("*"));
+
+        // Allow credentials (important for JWT tokens)
         configuration.setAllowCredentials(true);
+
+        // Expose Authorization header (needed for JWT)
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+
+        // Apply CORS configuration to all endpoints
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 }
