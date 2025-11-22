@@ -23,53 +23,69 @@ public class MailService {
 
     @Autowired
     private UserMailboxRepository userMailboxRepository;
-
+    
     @Transactional
     public Mail sendMail(Long senderId, SendMailRequest request) {
-        // Get sender
-        User sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new RuntimeException("Sender not found"));
+        System.out.println("=== SENDING MAIL ===");
+        System.out.println("Sender ID: " + senderId);
+        System.out.println("Request: " + request);
 
-        // Validate recipients exist
-        for (Long recipientId : request.getRecipientIds()) {
-            if (!userRepository.existsById(recipientId)) {
-                throw new RuntimeException("Recipient not found with id: " + recipientId);
-            }
-        }
+        // Find sender
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new RuntimeException("Sender not found with ID: " + senderId));
+
+        // Find recipient by email
+        User recipient = userRepository.findByEmail(request.getRecipientEmail())
+                .orElseThrow(() -> new RuntimeException("Recipient not found with email: " + request.getRecipientEmail()));
+
+        System.out.println("Sender: " + sender.getUsername() + " (" + sender.getEmail() + ")");
+        System.out.println("Recipient: " + recipient.getUsername() + " (" + recipient.getEmail() + ")");
 
         // Create mail
         Mail mail = new Mail();
-        mail.setSender(sender);
         mail.setSubject(request.getSubject());
         mail.setContent(request.getContent());
-        mail.setMailType(request.getMailType());
+        mail.setSender(sender);
+        mail.setMailType("NORMAL");
+        mail.setHasAttachments(false);
+        // sentAt is set by @PrePersist
 
-        Mail savedMail = mailRepository.save(mail);
+        // Save mail first
+        mail = mailRepository.save(mail);
+        System.out.println("Mail saved with ID: " + mail.getMailId());
 
-        // Create mailbox entry for sender (SENT folder)
+        // Create UserMailbox entry for RECIPIENT (their inbox)
+        UserMailbox recipientMailbox = new UserMailbox();
+        recipientMailbox.setMail(mail);
+        recipientMailbox.setUser(recipient);
+        recipientMailbox.setMailRole(MailRole.RECIPIENT);
+        recipientMailbox.setFolder(MailFolder.INBOX);
+        recipientMailbox.setIsRead(false);
+        recipientMailbox.setIsStarred(false);
+        recipientMailbox.setIsDeleted(false);
+        recipientMailbox.setIsArchived(false);
+        // receivedAt is set by @PrePersist
+
+        userMailboxRepository.save(recipientMailbox);
+        System.out.println("✅ Recipient mailbox entry created (INBOX)");
+
+        // Create UserMailbox entry for SENDER (their sent folder)
         UserMailbox senderMailbox = new UserMailbox();
+        senderMailbox.setMail(mail);
         senderMailbox.setUser(sender);
-        senderMailbox.setMail(savedMail);
         senderMailbox.setMailRole(MailRole.SENDER);
         senderMailbox.setFolder(MailFolder.SENT);
-        senderMailbox.setIsRead(true);
+        senderMailbox.setIsRead(true);  // Sender has already "read" it
+        senderMailbox.setIsStarred(false);
+        senderMailbox.setIsDeleted(false);
+        senderMailbox.setIsArchived(false);
+
         userMailboxRepository.save(senderMailbox);
+        System.out.println("✅ Sender mailbox entry created (SENT)");
 
-        // Create mailbox entries for recipients (INBOX)
-        for (Long recipientId : request.getRecipientIds()) {
-            User recipient = userRepository.findById(recipientId)
-                    .orElseThrow(() -> new RuntimeException("Recipient not found: " + recipientId));
+        System.out.println("=== MAIL SENT SUCCESSFULLY ===\n");
 
-            UserMailbox recipientMailbox = new UserMailbox();
-            recipientMailbox.setUser(recipient);
-            recipientMailbox.setMail(savedMail);
-            recipientMailbox.setMailRole(MailRole.RECIPIENT);
-            recipientMailbox.setFolder(MailFolder.INBOX);
-            recipientMailbox.setIsRead(false);
-            userMailboxRepository.save(recipientMailbox);
-        }
-
-        return savedMail;
+        return mail;
     }
 
     public List<MailResponse> getInbox(Long userId) {

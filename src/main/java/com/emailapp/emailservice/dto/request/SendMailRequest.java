@@ -1,27 +1,29 @@
 package com.emailapp.emailservice.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import java.util.List;
 
 public class SendMailRequest {
+
+    @NotBlank(message = "Recipient email is required")
+    @Email(message = "Invalid email format")
+    private String recipientEmail;  // ✅ Change from List<Long> recipientIds
 
     @NotBlank(message = "Subject is required")
     private String subject;
 
     @NotBlank(message = "Content is required")
-    private String content;
-
-    @NotEmpty(message = "At least one recipient is required")
-    private List<Long> recipientIds;
-
-    private String mailType = "NORMAL";
-
-    // Constructors
-    public SendMailRequest() {
-    }
+    private String content;  // ✅ Make sure it's 'content', not 'body'
 
     // Getters and Setters
+    public String getRecipientEmail() {
+        return recipientEmail;
+    }
+
+    public void setRecipientEmail(String recipientEmail) {
+        this.recipientEmail = recipientEmail;
+    }
+
     public String getSubject() {
         return subject;
     }
@@ -38,19 +40,12 @@ public class SendMailRequest {
         this.content = content;
     }
 
-    public List<Long> getRecipientIds() {
-        return recipientIds;
-    }
-
-    public void setRecipientIds(List<Long> recipientIds) {
-        this.recipientIds = recipientIds;
-    }
-
-    public String getMailType() {
-        return mailType;
-    }
-
-    public void setMailType(String mailType) {
-        this.mailType = mailType;
+    @Override
+    public String toString() {
+        return "SendMailRequest{" +
+                "recipientEmail='" + recipientEmail + '\'' +
+                ", subject='" + subject + '\'' +
+                ", content='" + content + '\'' +
+                '}';
     }
 }
