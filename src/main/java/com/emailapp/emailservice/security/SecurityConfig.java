@@ -75,7 +75,9 @@ public class SecurityConfig {
                 "http://localhost:5173",      // Vite default port
                 "http://127.0.0.1:5173",      // Alternative localhost
                 "http://localhost:3000",      // Create React App default port (backup)
-                "http://127.0.0.1:3000"
+                "http://127.0.0.1:3000",
+                "https://my-app-name.vercel.app",
+                "https://*.vercel.app"
         ));
 
         // Allow all HTTP methods
