@@ -22,9 +22,9 @@ public class JwtUtil {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private Long expiration;
+    private long expiration;
 
-    public String generateToken(String username, Long userId) {
+    public String generateToken(String username, long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId",userId);
         return createToken(claims, username);
