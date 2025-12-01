@@ -72,8 +72,8 @@ public class SecurityConfig {
 
         // Allow your Vite React frontend (port 5173) and other possible ports
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173",      // Vite default port
-                "http://127.0.0.1:5173",      // Alternative localhost
+                "http://localhost:4173",      // Vite default port
+                "http://127.0.0.1:4173",      // Alternative localhost
                 "http://localhost:3000",      // Create React App default port (backup)
                 "http://127.0.0.1:3000",
                 "https://my-app-name.vercel.app",
