@@ -72,14 +72,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost:4173",      // Vite default port
-                "http://127.0.0.1:4173",      // Alternative localhost
-                "http://localhost:3000",      // Create React App default port (backup)
-                "http://127.0.0.1:3000",
-                "https://email-service-frontend-rho.vercel.app/",
-                "https://*.vercel.app"
-        )); // Allow all origins
+        configuration.setAllowedOrigins(Arrays.asList(
+                "https://email-service-frontend-rho.vercel.app",
+                "http://localhost:4173",
+                "http://127.0.0.1:4173",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
