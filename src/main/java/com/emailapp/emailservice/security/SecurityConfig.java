@@ -77,7 +77,7 @@ public class SecurityConfig {
                 "http://127.0.0.1:4173",      // Alternative localhost
                 "http://localhost:3000",      // Create React App default port (backup)
                 "http://127.0.0.1:3000",
-                "https://my-app-name.vercel.app",
+                "https://email-service-frontend-rho.vercel.app/",
                 "https://*.vercel.app"
         )); // Allow all origins
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
