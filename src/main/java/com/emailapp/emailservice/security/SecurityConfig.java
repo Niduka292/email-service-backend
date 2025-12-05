@@ -1,5 +1,6 @@
 package com.emailapp.emailservice.security;
 
+import com.emailapp.emailservice.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -74,8 +75,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "https://email-service-frontend-rho.vercel.app",
-                "http://localhost:4173",
-                "http://127.0.0.1:4173",
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
                 "http://localhost:3000",
                 "http://127.0.0.1:3000"
         ));
@@ -87,41 +88,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-    /*
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        // Allow your Vite React frontend (port 5173) and other possible ports
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:4173",      // Vite default port
-                "http://127.0.0.1:4173",      // Alternative localhost
-                "http://localhost:3000",      // Create React App default port (backup)
-                "http://127.0.0.1:3000",
-                "https://my-app-name.vercel.app",
-                "https://*.vercel.app"
-        ));
-
-        // Allow all HTTP methods
-        configuration.setAllowedMethods(Arrays.asList(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
-        ));
-
-        // Allow all headers
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-
-        // Allow credentials (important for JWT tokens)
-        configuration.setAllowCredentials(true);
-
-        // Expose Authorization header (needed for JWT)
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
-
-        // Apply CORS configuration to all endpoints
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-
-        return source;
-    }*/
-
 }

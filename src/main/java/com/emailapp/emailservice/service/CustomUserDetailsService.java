@@ -1,4 +1,4 @@
-package com.emailapp.emailservice.security;
+package com.emailapp.emailservice.service;
 
 import com.emailapp.emailservice.entity.User;
 import com.emailapp.emailservice.repository.UserRepository;
