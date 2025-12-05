@@ -172,7 +172,7 @@ src/main/java/com/emailapp/emailservice/
 ## 🔑 API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register new user
+- `POST /api/signup` - Register new user
 - `POST /api/auth/login` - User login (returns JWT token)
 
 ### Emails (Protected - Requires JWT Token)
@@ -185,79 +185,6 @@ src/main/java/com/emailapp/emailservice/
 - `GET /api/emails/{id}` - Get specific email
 - `PUT /api/emails/{id}/star` - Star/unstar email
 - `DELETE /api/emails/{id}` - Move email to trash
-- `GET /api/emails/search` - Search emails
-    - Query params: `query`, `from`, `to`, `startDate`, `endDate`
-
-### Keyboard Shortcuts (Protected)
-- `GET /api/shortcuts` - Get user's keyboard shortcuts
-- `POST /api/shortcuts` - Create new shortcut
-- `PUT /api/shortcuts/{id}` - Update shortcut
-- `DELETE /api/shortcuts/{id}` - Delete shortcut
-
-### Users (Protected)
-- `GET /api/users/me` - Get current user profile
-- `PUT /api/users/me` - Update user profile
-
-## 🔍 Search Functionality
-
-The backend supports powerful full-text search across multiple fields:
-
-### Search Endpoints
-```bash
-# Search by keyword (searches in subject, content, sender name, sender email)
-GET /api/emails/search?query=meeting
-
-# Search by specific sender
-GET /api/emails/search?from=john@example.com
-
-# Search by date range
-GET /api/emails/search?startDate=2024-01-01&endDate=2024-12-31
-
-# Combined search
-GET /api/emails/search?query=report&from=boss@company.com&startDate=2024-11-01
-```
-
-### Search Features
-- **Subject Search**: Full-text search in email subjects
-- **Content Search**: Full-text search in email body
-- **Sender Name Search**: Search by sender's display name
-- **Sender Email Search**: Search by sender's email address
-- **Date Range Filtering**: Filter by start and end dates
-- **Combined Filters**: Use multiple search criteria together
-
-## ⌨️ Keyboard Shortcuts Support
-
-The backend provides API endpoints for managing user-customizable keyboard shortcuts:
-
-### Default Shortcuts (Backend manages these)
-- `C` - Compose new email
-- `R` - Reply to email
-- `D` - Delete email
-- `*` - Star/unstar email
-- `/` - Focus search
-- `?` - Show shortcuts help
-
-### Shortcut API
-```bash
-# Get all shortcuts for user
-GET /api/shortcuts
-
-# Create custom shortcut
-POST /api/shortcuts
-{
-  "key": "E",
-  "action": "archive",
-  "description": "Archive selected email"
-}
-
-# Update shortcut
-PUT /api/shortcuts/{id}
-{
-  "key": "F",
-  "action": "forward",
-  "description": "Forward email"
-}
-```
 
 ## 🧪 Testing Credentials
 
