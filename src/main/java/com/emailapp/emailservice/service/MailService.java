@@ -191,4 +191,18 @@ public class MailService {
         response.setFolder(mailbox.getFolder().toString());
         return response;
     }
+
+    public String getMailContentById(Long mailId){
+        try{
+            String content = mailRepository.findMailByMailId(mailId).getContent();
+            if(content != null){
+                return content;
+            }else{
+                return "Email content does not exist.";
+            }
+        }catch(Exception e){
+            System.err.println("Error fetching mail content: "+e.getMessage());
+            return "Failed to fetch mail content.";
+        }
+    }
 }

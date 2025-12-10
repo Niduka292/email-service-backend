@@ -4,6 +4,7 @@ import com.emailapp.emailservice.dto.request.SendMailRequest;
 import com.emailapp.emailservice.dto.response.ApiResponse;
 import com.emailapp.emailservice.dto.response.MailResponse;
 import com.emailapp.emailservice.entity.Mail;
+import com.emailapp.emailservice.service.AIService;
 import com.emailapp.emailservice.service.MailService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class MailController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private AIService aiService;
 
     // POST /api/mails/send/{senderId} - Send new email
     @PostMapping("/send/{senderId}")
@@ -140,6 +144,25 @@ public class MailController {
                     .body(new ApiResponse(false, e.getMessage(), null));
         }
     }
+
+    @GetMapping("/{mailId}/summary")
+    public ResponseEntity<String> getEmailSummary(@PathVariable Long mailId){
+
+        try{
+            String emailContent = mailService.getMailContentById(mailId);
+
+            if(emailContent == null || emailContent.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email content not found.");
+            }
+
+            String summary = aiService.summarizeMail(emailContent);
+            return ResponseEntity.ok(summary);
+
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing AI summary request.");
+        }
+    }
 }
 
 /*
@@ -150,5 +173,5 @@ Mapped "{[/api/users/{userId}],methods=[GET]}"
 Mapped "{[/api/mails/send/{senderId}],methods=[POST]}"
 Mapped "{[/api/mails/inbox/{userId}],methods=[GET]}"
 Mapped "{[/api/mails/sent/{userId}],methods=[GET]}"
-
+Mapped "{[/api/mails/{mailId}/summary],methods=[GET]}"
  */
