@@ -16,6 +16,7 @@ A Spring Boot REST API backend for a full-featured email client with JWT authent
 - **Email Operations**: Star/unstar emails, move to trash, restore
 
 ### 🔎 Advanced Features
+- **AI Summarization**: Dedicated API endpoint to summarize email content using the Gemini model, significantly improving user efficiency.
 - **Full-Text Search**: Search across subject, content, sender name, and sender email
 - **Keyboard Shortcuts API**: Backend support for user-customizable shortcuts
 - **RESTful API**: Clean and well-documented endpoints
@@ -28,6 +29,7 @@ A Spring Boot REST API backend for a full-featured email client with JWT authent
 - **Spring Security 6.5.6**
 - **Spring Data JPA**
 - **PostgreSQL**
+- **Google Gemini API**
 - **JWT (JSON Web Tokens)**
 - **Maven**
 - **Lombok**
@@ -38,6 +40,7 @@ A Spring Boot REST API backend for a full-featured email client with JWT authent
 - Maven 3.6+
 - PostgreSQL 12+ (for local development)
 - Git
+- Gemini API Key (required for the summarization feature)
 
 ## ⚙️ Local Development Setup
 
@@ -86,9 +89,23 @@ logging.level.com.emailapp=DEBUG
 # JWT Configuration - LOCAL
 jwt.secret=your-local-secret-key-at-least-256-bits-long-for-development
 jwt.expiration=86400000
-```
 
-### 4. Run the Application
+# GEMINI API Configuration
+# Note: This is resolved via an environment variable for security
+gemini.api.key=${GEMINI_API_KEY}
+```
+### 4. Set Environment Variable for Gemini API
+For the AI summarization feature to work, you must set your Gemini API key as an environment variable before running the application.
+
+In your terminal (Linux/macOS):
+```bash
+export GEMINI_API_KEY="YOUR_ACTUAL_GEMINI_API_KEY"
+```
+In IntelliJ IDEA/IDE:
+
+Set the GEMINI_API_KEY variable in the Run/Debug Configuration settings.
+
+### 5. Run the Application
 
 **Using Maven:**
 ```bash
@@ -154,6 +171,7 @@ src/main/java/com/emailapp/emailservice/
 │   └── JwtAuthenticationFilter.java
 ├── service/            # Business logic
 │   ├── UserService.java
+│   ├── AIService.java
 │   ├── CustomUserDetailsService.java
 │   └── MailService.java
 ├── dto/            # DTO classes
@@ -207,6 +225,9 @@ jwt.expiration=86400000
 spring.datasource.url=jdbc:postgresql://localhost:5432/email_system_db
 spring.datasource.username=postgres
 spring.datasource.password=your_password
+
+# OS Environment Variable (must be exported):
+GEMINI_API_KEY=YOUR_API_KEY
 ```
 
 ### For Production (Railway)
@@ -216,6 +237,7 @@ DATABASE_URL=postgresql://user:password@host:port/database
 JWT_SECRET=your-production-secret-key-minimum-256-bits
 JWT_EXPIRATION=86400000
 PORT=8080
+GEMINI_API_KEY=YOUR_PRODUCTION_GEMINI_KEY
 ```
 
 ## 🚀 Deployment
@@ -225,10 +247,12 @@ PORT=8080
 1. **Connect Repository** to Railway
 2. **Add PostgreSQL Database** (Railway addon)
 3. **Set Environment Variables**:
+
 ```env
    JWT_SECRET=your-production-secret-key
    JWT_EXPIRATION=86400000
    DATABASE_URL=${{Postgres.DATABASE_URL}}
+   GEMINI_API_KEY=YOUR_PRODUCTION_GEMINI_KEY
 ```
 4. **Deploy** - Railway auto-deploys on push to main
 
@@ -261,6 +285,10 @@ psql -U postgres -d email_system_db
 ### JWT Issues
 - Ensure `jwt.secret` is at least 256 bits (32+ characters)
 - Verify token is being sent in Authorization header: `Bearer <token>`
+
+## AI Summarization Not Working
+- Crucially: Ensure the GEMINI_API_KEY environment variable is set correctly both locally and in your deployment environment.
+- Check the application logs (logging.level.root=INFO) for any connection errors or API rate limits.
 
 ### CORS Issues
 - Ensure `WebConfig.java` has correct allowed origins
