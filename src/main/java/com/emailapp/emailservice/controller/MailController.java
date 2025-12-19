@@ -163,6 +163,13 @@ public class MailController {
                     .body("Error processing AI summary request.");
         }
     }
+
+    @GetMapping("/{mailId}/suggestions")
+    public ResponseEntity<List<String>> getSmartReplies(@PathVariable Long mailId) {
+        String emailContent = mailService.getMailContentById(mailId);
+        List<String> suggestions = aiService.generateSmartReplies(emailContent);
+        return ResponseEntity.ok(suggestions);
+    }
 }
 
 /*
