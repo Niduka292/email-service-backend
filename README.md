@@ -3,8 +3,6 @@
 A Spring Boot REST API backend for a full-featured email client with JWT authentication, email management, advanced search, and keyboard shortcuts support.
 
 ## 🚀 Live Demo
-- **Production API**: https://email-service-backend-production.up.railway.app
-- **Frontend Live Demo**: https://email-service-frontend-rho.vercel.app/inbox
 - **Frontend Repository**: https://github.com/Niduka292/email-service-frontend.git
 
 ## ✨ Features
@@ -204,17 +202,6 @@ src/main/java/com/emailapp/emailservice/
 - `PUT /api/emails/{id}/star` - Star/unstar email
 - `DELETE /api/emails/{id}` - Move email to trash
 
-## 🧪 Testing Credentials
-
-Use these test accounts for development and testing:
-
-| Username | Password | Email |
-|----------|----------|-------|
-| `george` | `george123` | `george@example.com` |
-| `alice` | `alice123` | `alice@example.com` |
-
-Or register a new user via `/api/auth/register`
-
 ## 🔒 Environment Variables
 
 ### For Local Development
@@ -335,7 +322,6 @@ This project is licensed under the MIT License.
 
 - **Frontend Repository**: https://github.com/Niduka292/email-service-frontend.git
 - **Live Demo**: https://email-service-frontend-rho.vercel.app/inbox
-- **Production API**: https://email-service-backend-production.up.railway.app
 
 ## 📞 Support
 
